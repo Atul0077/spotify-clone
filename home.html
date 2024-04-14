@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spotify Navbar</title>
+<style>
+body {
+  background-image: url('pngwing.com.png');
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+  background-blend-mode: overlay; /* Blend the image with the overlay */
+  background-size: 56%; /* Adjust the size of the background image */
+  background-repeat: no-repeat; /* Do not repeat the background image */
+  background-position: right 15%; /* Center the background image horizontally, align it to the center vertically, and move it 50% lower */
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Changed font family */
+}
+
+.navbar {
+  background-color: transparent; /* Make the navbar transparent */
+  color: white; /* Text color */
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 54px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  height: 134px; /* Adjust the height of the logo */
+  margin-right: 98px; /* Space between logo and text */
+  background-color: transparent; /* Background color of the logo */
+  padding: 5px; /* Padding around the logo */
+  border-radius: 5px; /* Optional: Add some border radius */
+}
+
+.navbar-menu {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li {
+  margin-right: 20px; /* Space between menu items */
+}
+
+.navbar-menu li:first-child {
+  margin-right: auto; /* Push the first menu item to the left */
+}
+
+.navbar-menu li:last-child {
+  margin-right: 0; /* Remove margin for the last menu item */
+}
+
+.navbar-menu li a {
+  color: #b8ffd1;
+  text-decoration: none;
+  padding: 0 12px; /* Padding around menu items */
+  font-size: 22px;
+  font-weight: bold; /* Added font weight */
+}
+
+.navbar-menu li a:hover {
+  text-decoration: underline;
+  color: #1ed65f; /* Underline on hover */
+}
+
+.player-container {
+    background-color: transparent;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+}
+
+.player-controls button {
+  display: flex;
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.player-controls button:hover {
+  color: #1ed65f; /* Change color on hover */
+}
+
+.song-details {
+  display: flex;
+  padding: 12px;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.song-details span {
+  margin-bottom: 5px;
+}
+
+.song-progress {
+  flex: 1;
+  margin: 20px 0; /* Adjusted margin */
+  display: flex;
+  align-items: center;
+  width: 80%; /* Increased width */
+}
+
+.song-progress input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  background-color: #000000;
+  height: 10px; /* Increased height */
+  border-radius: 5px;
+  outline: none;
+  margin-right: 10px; /* Add margin to separate from the buttons */
+}
+
+.song-progress input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  background-color: #1ed65f;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.playlist-container {
+  margin-top: 100px; /* Adjust margin as needed */
+  margin-left: auto; /* Left margin for playlist */
+}
+
+/* Style for playlist items */
+.playlist-item {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 10px; /* Space between playlist items */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.playlist-item img {
+  width: 50px; /* Adjust the width of the song images */
+  margin-right: 10px; /* Space between image and text */
+  border-radius: 50%; /* Make the image rounded */
+  transition: transform 0.1s ease; /* Added transition for hover effect */
+}
+
+.playlist-item img:hover {
+  transform: scale(1.4); /* Scale up image on hover */
+}
+
+#play-button {
+    display: flex;
+}
+
+.gif-container {
+  width: 93px; /* Adjust the width */
+  margin-top: -360px; /* Adjust top margin */
+  margin-left: 763px; /* Adjust left margin */
+  display: none; /* Initially hide */
+}
+
+/* Added styles for song name display */
+.current-song-details {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.current-song-details img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  animation: rotateImage 2s linear infinite; /* Animation for rotating image */
+  display: none; /* Initially hide the rotating image */
+}
+
+.lyrics-container {
+  display: none; /* Initially hide the lyrics container */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  color: black; /* Text color for lyrics */
+  padding: 20px;
+  border-radius: 5px;
+  width: 298px;
+  position: fixed;
+  bottom: 165px;
+  left: calc(50% - 200px);
+  z-index: 1000; /* Ensure lyrics container is above other elements */
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 296px;
+}
+
+.lyrics-container p {
+  margin: 0;
+}
+.current-song-details img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  animation: rotateImage 2s linear infinite; /* Animation for rotating image */
+}
+
+.lyrics-container p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.5); /* Default text color */
+}
+
+.lyrics-container p.highlight {
+  color: black; /* Highlighted text color */
+}
+
+@keyframes rotateImage {
+  from {
+    transform: rotate(0deg); /* Start rotation from 0 degrees */
+  }
+  to {
+    transform: rotate(360deg); /* Rotate image 360 degrees */
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="navbar-logo">
+    <img src="spotify-logo-png-transparent-spotify-logo-images-348161.png" alt="Spotify Logo">
+  </div>
+  <ul class="navbar-menu">
+    <li><a href="#" class="menu-link">Home</a></li>
+    <li><a href="#" class="menu-link">About</a></li>
+    <!-- Add more menu items as needed -->
+  </ul>
+</div>
+
+<div class="playlist-container">
+  <div class="playlist-item" data-lyrics="Believer lyrics here...">
+    <img src="song1.jpg" alt="Song 1">
+    <div class="song-details">
+      <span class="song-name">BELIVER</span>
+      <button class="play-button" data-src="song1.mp3"><i class="fas fa-play"></i></button>
+    </div>
+  </div>
+  <div class="playlist-item" data-lyrics="Let Me Love You lyrics here...">
+    <img src="song2.jpeg" alt="Song 2">
+    <div class="song-details">
+      <span class="song-name">LET ME LOVE YOU</span>
+      <button class="play-button" data-src="song2.mp3"><i class="fas fa-play"></i></button>
+    </div>
+  </div>
+  <div class="playlist-item" data-lyrics="Kafijyada lyrics here...">
+    <img src="song3.jpg" alt="Song 3">
+    <div class="song-details">
+      <span class="song-name">KAFIJYADA</span>
+      <button class="play-button" data-src="song3.mp3"><i class="fas fa-play"></i></button>
+    </div>
+  </div>
+  <!-- Add more playlist items as needed -->
+</div>
+
+<div class="gif-container">
+  <img src="giphy.gif" alt="Wave GIF">
+</div>
+
+<div class="player-container">
+  <div class="player-controls">
+    <!-- Previous song button -->
+    <button id="prev-song"><i class="fa-solid fa-angles-left"></i></button>
+    
+    <!-- Play/pause button -->
+    <button id="play-pause-button"><i class="fa-solid fa-play fa-beat-fade"></i></button>
+    
+    <!-- Next song button -->
+    <button id="next-song"><i class="fa-solid fa-angles-right"></i></button>
+    
+    <!-- Lyrics button -->
+    <button id="toggle-lyrics">Lyrics</button>
+  </div>
+  <div class="current-song-details">
+    <img src="" alt="Song Image" id="current-song-image">
+    <span id="current-song-name"></span>
+  </div>
+  <div class="song-progress">
+    <input id="progress-bar" type="range" min="0" max="100" value="0">
+  </div>
+  <div class="song-duration">0:00 / 0:00</div>
+</div>
+
+<!-- Lyrics container -->
+<div class="lyrics-container"></div>
+
+<!-- Your content goes here -->
+<script src="https://kit.fontawesome.com/23fef31d7b.js" crossorigin="anonymous"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const audio = new Audio(); // Create a new audio element
+  const playButtons = document.querySelectorAll(".play-button");
+  const playPauseButton = document.getElementById("play-pause-button");
+  const progressBar = document.getElementById("progress-bar");
+  const songDurationElement = document.querySelector(".song-duration");
+  const gifContainer = document.querySelector(".gif-container");
+  const currentSongName = document.getElementById("current-song-name");
+  const currentSongImage = document.getElementById("current-song-image");
+  const lyricsContainer = document.querySelector(".lyrics-container");
+  let currentSongIndex = 0;
+  let isPlaying = false;
+
+//   const lyrics = {
+//     "BELIVER": [
+//       { time: 0, text: "First things first" },
+//       { time: 10, text: "I'ma say all the words inside my head<br>" },
+//       // Add more lines of lyrics with corresponding times as needed
+//     ],
+//     "LET ME LOVE YOU": [
+//       { time: 0, text: "First line of Let Me Love You lyrics" },
+//       { time: 15, text: "Second line of Let Me Love You lyrics" },
+//       // Add more lines of lyrics with corresponding times as needed
+//     ],
+//     "KAFIJYADA": [
+//       { time: 0, text: "First line of Kafijyada lyrics" },
+//       { time: 8, text: "Second line of Kafijyada lyrics" },
+//       // Add more lines of lyrics with corresponding times as needed
+//     ]
+//   };
+
+let pausedAt = null; // Variable to store the paused time
+
+  function playSong(index) {
+    const button = playButtons[index];
+    const icon = button.querySelector("i");
+    const src = button.getAttribute("data-src");
+
+    audio.src = src;
+    if (pausedAt) {
+        audio.currentTime = pausedAt; // Resume from the saved position
+        pausedAt = null; // Reset the saved position
+    } else {
+        audio.currentTime = 0; // Start from the beginning
+    }
+    
+    audio.play();
+    isPlaying = true;
+    updatePlayPauseIcon();
+    updateSongDuration();
+    highlightCurrentSong(button);
+    highlightCurrentSongDuration(button);
+    pauseOtherSongs(button);
+    showGif();
+    displayCurrentSong(button);
+  }
+
+  function pauseSong() {
+    audio.pause();
+    isPlaying = false;
+    updatePlayPauseIcon();
+    hideGif();
+    stopImageRotation();
+    // Remember the current playback position
+    pausedAt = audio.currentTime;
+}
+
+  function updatePlayPauseIcon() {
+    if (isPlaying) {
+      playPauseButton.innerHTML = '<i class="fa-solid fa-pause"></i>';
+    } else {
+      playPauseButton.innerHTML = '<i class="fa-solid fa-play fa-beat-fade"></i>';
+    }
+  }
+
+  function updateSongDuration() {
+    audio.addEventListener("timeupdate", function() {
+      const currentTime = formatTime(audio.currentTime);
+      const duration = formatTime(audio.duration);
+      songDurationElement.textContent = `${currentTime} / ${duration}`;
+      progressBar.value = (audio.currentTime / audio.duration) * 100;
+      highlightLyrics();
+    });
+  }
+
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  function highlightLyrics() {
+    const currentTime = audio.currentTime;
+    const currentSongName = playButtons[currentSongIndex].parentNode.querySelector('.song-name').textContent;
+    const currentLyrics = lyrics[currentSongName];
+    
+    if (currentLyrics) {
+      for (let i = 0; i < currentLyrics.length; i++) {
+        if (currentTime >= currentLyrics[i].time && currentTime < (currentLyrics[i + 1] ? currentLyrics[i + 1].time : Infinity)) {
+          const lyricsParagraphs = lyricsContainer.querySelectorAll("p");
+          lyricsParagraphs.forEach(p => p.classList.remove("highlight"));
+          lyricsContainer.innerHTML = `<p class="highlight">${currentLyrics[i].text}</p>`;
+          break;
+        }
+      }
+    }
+  }
+
+  function highlightCurrentSong(button) {
+    playButtons.forEach(btn => {
+      if (btn === button) {
+        btn.classList.add('current-song');
+      } else {
+        btn.classList.remove('current-song');
+      }
+    });
+  }
+
+  function highlightCurrentSongDuration(button) {
+    const duration = button.previousElementSibling.textContent;
+    songDurationElement.textContent = `0:00 / ${duration}`;
+  }
+
+  function pauseOtherSongs(currentButton) {
+    playButtons.forEach(btn => {
+      if (btn !== currentButton) {
+        const icon = btn.querySelector("i");
+        icon.classList.remove("fa-pause");
+        icon.classList.add("fa-play");
+      }
+    });
+  }
+
+  function showGif() {
+    gifContainer.style.display = "block";
+  }
+
+  function hideGif() {
+    gifContainer.style.display = "none";
+  }
+
+  function displayCurrentSong(button) {
+    const songName = button.parentNode.querySelector('.song-name').textContent;
+    const songImageSrc = button.parentNode.parentNode.querySelector('img').getAttribute('src');
+    currentSongName.textContent = `${songName}`;
+    currentSongImage.src = songImageSrc || 'default-image.jpg'; // Default image source
+    startImageRotation();
+  }
+
+  function startImageRotation() {
+    currentSongImage.style.display = "inline-block";
+    currentSongImage.style.animationPlayState = "running";
+  }
+
+  function stopImageRotation() {
+    currentSongImage.style.animationPlayState = "paused";
+  }
+
+  function getLyrics(songName) {
+    // Replace this with your logic to fetch lyrics for the given songName
+    // This is just a placeholder
+    switch(songName.toLowerCase()) {
+      case 'beliver':
+        return `<p>
+            First things first<br>
+            I'ma say all the words inside my head<br>
+            I'm fired up and tired of<br>
+            The way that things have been, oh-ooh<br>
+            The way that things have been, oh-ooh<br>
+            <br>
+            Second things second<br>
+            Don't you tell me what you think that I could be<br>
+            I'm the one at the sail<br>
+            I'm the master of my sea, oh-ooh<br>
+            The master of my sea, oh-ooh<br>
+            <br>
+            I was broken from a young age<br>
+Taking my sulkin' to the masses<br>
+Writing my poems for the few<br>
+That look at me, took to me, shook at me, feelin' me<br>
+Singing from heartache from the pain<br>
+Taking my message from the veins<br>
+Speaking my lesson from the brain<br>
+Seeing the beauty through the...<br>
+<br>
+Pain! You made me a, you made me a<br>
+Believer, believer<br>
+Pain! You break me down, you build me up<br>
+Believer, believer<br>
+Pain! Oh, let the bullets fly, oh, let them rain<br>
+My life, my love, my drive, it came from…<br>
+Pain! You made me a, you made me a<br>
+Believer, believer<br>
+<br>
+Third things third<br>
+Send a prayer to the ones up above<br>
+All the hate that you've heard<br>
+Has turned your spirit to a dove, oh-ooh<br>
+Your spirit up above, oh-ooh<br>
+<br>
+I was chokin' in the crowd<br>
+Building my rain up in the cloud<br>
+Falling like ashes to the ground<br>
+Hoping my feelings, they would drown<br>
+But they never did, ever lived, ebbin' and flowin'<br>
+Inhibited, limited 'til it broke open and rained down<br>
+It rained down, like…<br>
+<br>
+Pain! You made me a, you made me a<br>
+Believer, believer<br>
+Pain! You break me down, you build me up<br>
+Believer, believer<br>
+Pain! Oh, let the bullets fly, oh, let them rain<br>
+My life, my love, my drive, it came from…<br>
+Pain! You made me a, you made me a<br>
+Believer, believer<br>
+<br>
+Last things last<br>
+By the grace of the fire and the flames<br>
+You're the face of the future<br>
+The blood in my veins, oh-ooh<br>
+The blood in my veins, oh-ooh<br>
+<br>
+But they never did, ever lived, ebbin' and flowin'<br>
+Inhibited, limited 'til it broke open and rained down<br>
+
+It rained down, like…<br>
+<br>
+Pain! You made me a, you made me a<br>
+Believer, believer<br>
+Pain! You break me down, you build me up<br>
+Believer, believer<br>
+Pain! Oh, let the bullets fly, oh, let them rain<br>
+My life, my love, my drive, it came from…<br>
+Pain! You made me a, you made me a<br>
+Believer, believer<br>
+<br>
+            </p>`;
+      case 'let me love you':
+        return `<p>
+            I used to believe<br> We were burnin' on the edge of somethin' beautiful<br> Somethin' beautiful<br> Sellin' a dream<br> Smoke and mirrors keep us waitin' on a miracle<br> On a miracle
+
+[Pre-Chorus: Justin Bieber]<br> Say, go through the darkest of days<br> Heaven's a heartbreak away<br> Never let you go, never let me down<br> Oh, it's been a hell of a ride<br> Driving the edge of a knife<br> Never let you go, never let me down
+
+[Chorus: Justin Bieber]<br> Don't you give up, nah, nah, nah<br> I won't give up, nah, nah, nah<br> Let me love you<br> Let me love you<br> Don't you give up, nah, nah, nah<br> I won't give up, nah, nah, nah<br> Let me love you<br> Let me love you<br> Oh baby, baby<br>
+
+[Breakdown: DJ Snake]
+
+[Verse 2: Justin Bieber]<br> Don't fall asleep<br> At the wheel, we've got a million miles ahead of us<br> Miles ahead of us<br> All that we need<br> Is a rude awakening to know we're good enough yeah<br> Know we're good enough
+
+[Pre-Chorus: Justin Bieber]<br> Say go through the darkest of days<br> Heaven's a heartbreak away<br> Never let you go, never let me down<br> Oh it's been a hell of a ride<br> Driving the edge of a knife<br> Never let you go, never let me down
+
+[Chorus: Justin Bieber]<br> Don't you give up, nah, nah, nah<br> I won't give up, nah, nah, nah<br> Let me love you<br> Let me love you<br> Don't you give up, nah, nah, nah<br> I won't give up, nah, nah, nah<br> Let me love you<br> Let me love you<br> Oh baby, baby<br>
+
+[Breakdown: DJ Snake]
+
+[Chorus: Justin Bieber]<br> Don't you give up, nah, nah, nah<br> I won't give up, nah, nah, nah<br> Let me love you<br> Let me love you<br> Don't you give up, nah, nah, nah<br> I won't give up, nah, nah, nah<br> Let me love you<br> Let me love you<br> Oh baby, baby<br>
+
+
+            </p>`;
+      case 'kafijyada':
+        return `<p>
+            इतनी आवाज़ किस चीज़ की आ रही है
+
+आकर्षित रहना तुझसे आदत मेरी बचपन की है<br> मानु ना मानु ये जिगयसा काफ़ी fucked up सी है<br> मुझे दूर दूर से देखना है आता तुझे<br> मेरे दिल को खुद से समेटना भी सीखा दे मुझे<br> जो कुछ तुझमें देखा था<br> क्या था आख़िर, क्या था क्या था<br> बच्चा हूँ मैं भटका सा<br> प्यासा मैं तेरा हूँ प्यासा fucked up<br> आज कल काफ़ी ज़्यादा सड़कों पे घूम रहा हूँ<br> आज कल तेरी बातों के अंदर कूद रहा हूँ<br> खुद को मैं भूल रहा हूँ<br> बस इसी बहाने मैं तुझको ढूँढ रहा हूँ<br> देख लू जिस तरफ मुझको तू दिखा<br> चाह रहा था मैं क्या तुझको कबसे पता<br> देखता जिस तरफ तू ही तू दिखा<br> सोचु अब मैं क्या है इसपर काबू ना<br> जो सुना था कहानियों में, उन्होने तेरे बारे में ही तो लिखा<br> सो जाना चाहु, सवेरा का निकला<br> समझा जितना समझ सका<br> आज कल काफ़ी ज़्यादा<br> आज कल काफ़ी ज़्यादा काफ़ी ज़्यादा<br> आज कल काफ़ी ज़्यादा सड़कों पे घूम रहा हूँ<br> आज कल तेरी बातों के अंदर कूद रहा हूँ<br> सबकुछ मैं भूल रहा हूँ<br> बस इसी बहाने मैं तुझको ढूँढ रहा हूँ<br> मैं तुझको ढूँढ रहा हूँ<br> मैं तुझको ढूँढ रहा हूँ
+            </p>`;
+      default:
+        return "Lyrics not found";
+    }
+  }
+
+  document.getElementById("toggle-lyrics").addEventListener("click", () => {
+    if (lyricsContainer.style.display === "none") {
+      const currentSong = playButtons[currentSongIndex].parentNode.querySelector('.song-name').textContent;
+      const lyrics = getLyrics(currentSong);
+      lyricsContainer.innerHTML = `<p>${lyrics}</p>`;
+      lyricsContainer.style.display = "block";
+    } else {
+      lyricsContainer.style.display = "none";
+    }
+  });
+
+  playButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      if (index !== currentSongIndex) {
+        currentSongIndex = index;
+        playSong(index);
+      } else if (isPlaying) {
+        pauseSong();
+      } else {
+        playSong(index);
+      }
+    });
+  });
+
+  playPauseButton.addEventListener("click", () => {
+    if (isPlaying) {
+      pauseSong();
+    } else {
+      playSong(currentSongIndex);
+    }
+  });
+
+  progressBar.addEventListener("input", () => {
+    const seekTime = (progressBar.value / 100) * audio.duration;
+    audio.currentTime = seekTime;
+  });
+
+  document.getElementById("prev-song").addEventListener("click", () => {
+    currentSongIndex = (currentSongIndex - 1 + playButtons.length) % playButtons.length;
+    playSong(currentSongIndex);
+  });
+
+  document.getElementById("next-song").addEventListener("click", () => {
+    currentSongIndex = (currentSongIndex + 1) % playButtons.length;
+    playSong(currentSongIndex);
+  });
+});
+
+</script>
+
+</body>
+</html>
